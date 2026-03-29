@@ -82,10 +82,10 @@ const Dashboard = ({ clients, upcomingFollowUps, todayMeetings = [], onSelectCli
            <div className="flex gap-4 items-center">
               <div>
                  <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Target</div>
-                 <div className="font-bold text-slate-800 text-sm">{dailyStats.callsMade} / 30</div>
+                 <div className="font-bold text-slate-800 text-sm">{dailyStats.callsMade} / 15</div>
               </div>
               <div className="hidden sm:block w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
-                 <div className="h-full bg-emerald-400 transition-all rounded-full" style={{ width: `${Math.min(100, (dailyStats.callsMade / 30) * 100)}%` }} />
+                 <div className="h-full bg-emerald-400 transition-all rounded-full" style={{ width: `${Math.min(100, (dailyStats.callsMade / 15) * 100)}%` }} />
               </div>
            </div>
            <div className="w-px h-8 bg-slate-100"></div>
