@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { 
-  Users, PhoneCall, Calendar, Search, Plus, Download, BarChart3, Clock, MessageSquare, Menu, X, Upload, CheckCircle2, XCircle
+  Users, PhoneCall, Calendar, Search, Plus, Download, BarChart3, Clock, MessageSquare, Menu, X, Upload, CheckCircle2, XCircle, LogOut
 } from 'lucide-react';
 
 import Dashboard from './components/Dashboard';
@@ -8,8 +8,11 @@ import ClientList from './components/ClientList';
 import ClientProfile from './components/ClientProfile';
 import AddClientModal from './components/AddClientModal';
 import CallScript from './components/CallScript';
+import AuthPage from './components/AuthPage';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { useAuth } from './hooks/useAuth';
 import { parseCSV } from './utils';
+import './styles/auth.css';
 
 const TABS = {
   DASHBOARD: 'Dashboard',
@@ -22,13 +25,14 @@ const TABS = {
 };
 
 function App() {
+  // ── All hooks must be called unconditionally at the top ──
+  const { user, isLoading, signup, login, logout } = useAuth();
   const [clients, setClients] = useLocalStorage('crm_clients', []);
   const [activeTab, setActiveTab] = useState(TABS.DASHBOARD);
   const [selectedClientId, setSelectedClientId] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  
   const fileInputRef = useRef(null);
 
   const handleAddClient = (newClient) => {
@@ -127,9 +131,9 @@ function App() {
   const filteredClients = useMemo(() => {
     if (!searchTerm) return clients;
     const lowerSearch = searchTerm.toLowerCase();
-    return clients.filter(c => 
-      c.name.toLowerCase().includes(lowerSearch) || 
-      c.phone.includes(lowerSearch) || 
+    return clients.filter(c =>
+      c.name.toLowerCase().includes(lowerSearch) ||
+      c.phone.includes(lowerSearch) ||
       (c.source && c.source.toLowerCase().includes(lowerSearch)) ||
       (c.status && c.status.toLowerCase().includes(lowerSearch))
     );
@@ -156,6 +160,22 @@ function App() {
   }, [activeTab, searchTerm, filteredClients.length]);
 
   const selectedClient = clients.find(c => c.id === selectedClientId);
+
+  // ── Conditional rendering AFTER all hooks ──
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-900">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin"></div>
+          <span className="text-slate-400 font-medium text-sm">Loading NEXUS...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage onLogin={login} onSignup={signup} />;
+  }
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
@@ -285,6 +305,23 @@ function App() {
         </nav>
 
         <div className="p-4 border-t border-slate-800">
+          {/* User profile bar */}
+          <div className="flex items-center gap-3 mb-4 px-2">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/20">
+              {user.fullName?.charAt(0)?.toUpperCase() || 'U'}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-semibold text-white truncate">{user.fullName}</div>
+              <div className="text-xs text-slate-500 truncate">{user.email}</div>
+            </div>
+            <button
+              onClick={logout}
+              className="p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition-colors"
+              title="Sign out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
           <div className="grid grid-cols-2 gap-2 mb-4">
             <button 
               onClick={exportData}
