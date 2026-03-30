@@ -12,7 +12,7 @@ const INDUSTRIES = [
   "Other"
 ];
 
-const AddClientModal = ({ onClose, onAdd }) => {
+const AddClientModal = ({ onClose, onAdd, existingClients = [] }) => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -29,6 +29,27 @@ const AddClientModal = ({ onClose, onAdd }) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
     onAdd(formData);
+  };
+
+  const handlePhoneChange = (e) => {
+    const newPhone = e.target.value;
+    
+    // Check if the phone number matches an existing client
+    const existingMatch = existingClients.find(c => c.phone && c.phone.replace(/\D/g, '') === newPhone.replace(/\D/g, ''));
+    
+    if (existingMatch && newPhone.length >= 7) {
+      setFormData(prev => ({ 
+        ...prev, 
+        phone: newPhone,
+        name: existingMatch.name || prev.name,
+        companyName: existingMatch.companyName || prev.companyName,
+        industry: existingMatch.industry || prev.industry,
+        website: existingMatch.website || prev.website,
+        source: existingMatch.source || prev.source
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, phone: newPhone }));
+    }
   };
 
   return (
@@ -77,7 +98,7 @@ const AddClientModal = ({ onClose, onAdd }) => {
                         placeholder="e.g. 9841234567"
                         required
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        onChange={handlePhoneChange}
                       />
                     </div>
                   </div>

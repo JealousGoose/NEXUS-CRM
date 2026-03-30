@@ -52,6 +52,22 @@ function App() {
     setClients(clients.map(c => c.id === updatedClient.id ? updatedClient : c));
   };
 
+  const handleDeleteClient = (clientId) => {
+    if (window.confirm("Are you sure you want to delete this contact? This action cannot be undone.")) {
+      setClients(clients.filter(c => c.id !== clientId));
+      if (selectedClientId === clientId) {
+        setSelectedClientId(null);
+      }
+    }
+  };
+
+  const handleDeleteAllClients = () => {
+    if (window.confirm("WARNING: Are you sure you want to delete ALL contacts? This action CANNOT be undone!")) {
+      setClients([]);
+      setSelectedClientId(null);
+    }
+  };
+
   const handleAddLog = (clientId, logEntry) => {
     setClients(clients.map(c => {
       if (c.id === clientId) {
@@ -387,6 +403,8 @@ function App() {
                 clients={displayClients} 
                 onSelectClient={setSelectedClientId}
                 onUpdateClient={handleUpdateClient}
+                onDeleteClient={handleDeleteClient}
+                onDeleteAllClients={handleDeleteAllClients}
                 title={displayTitle}
               />
             )}
@@ -397,6 +415,7 @@ function App() {
                 onBack={() => setSelectedClientId(null)}
                 onAddLog={(log) => handleAddLog(selectedClientId, log)}
                 onUpdateClient={handleUpdateClient}
+                onDeleteClient={() => handleDeleteClient(selectedClientId)}
               />
             )}
 
@@ -419,6 +438,7 @@ function App() {
         <AddClientModal 
           onClose={() => setShowAddModal(false)}
           onAdd={handleAddClient}
+          existingClients={clients}
         />
       )}
     </div>
