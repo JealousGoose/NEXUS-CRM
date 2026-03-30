@@ -44,8 +44,8 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-fade-in pb-20">
       {/* Top Action Bar - Sticky */}
-      <div className="flex items-center justify-between bg-white p-4 rounded-2xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100 sticky top-0 md:top-2 z-50">
-        <button onClick={onBack} className="btn-secondary px-4 py-2 text-sm bg-slate-50 border-transparent shadow-none hover:bg-slate-100 flex gap-2 items-center text-slate-600">
+      <div className="flex items-center justify-between glass-panel-solid p-4 sticky top-0 md:top-2 z-50 mx-2 md:mx-0">
+        <button onClick={onBack} className="btn-secondary px-4 py-2 text-sm bg-slate-50 dark:bg-slate-800/50 border-transparent shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 flex gap-2 items-center text-slate-600 dark:text-slate-300">
           <ArrowLeft className="w-5 h-5 text-slate-400" />
           <span className="font-bold sm:inline hidden">Back to List</span>
         </button>
@@ -61,7 +61,7 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
            <a 
              href={getWhatsAppLink(client.phone, getSmartMessage(client))}
              target="_blank" rel="noopener noreferrer"
-             className="px-4 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 rounded-xl transition-colors font-semibold flex items-center gap-2"
+             className="px-4 py-2 bg-emerald-100 dark:bg-emerald-900/50 hover:bg-emerald-200 dark:hover:bg-emerald-800/80 text-emerald-700 dark:text-emerald-300 rounded-xl transition-colors font-semibold flex items-center gap-2"
            >
               <MessageCircle className="w-4 h-4" />
               <span className="hidden sm:inline">WhatsApp</span>
@@ -90,15 +90,15 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
                </span>
             </div>
             
-            <h2 className="text-2xl font-bold text-slate-900 mb-1">{client.companyName || client.name}</h2>
-            <div className="font-medium text-slate-500 mb-4">{client.phone} {client.companyName ? `• ${client.name}` : ''}</div>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{client.companyName || client.name}</h2>
+            <div className="font-medium text-slate-500 dark:text-slate-400 mb-4">{client.phone} {client.companyName ? `• ${client.name}` : ''}</div>
 
             <div className="flex items-center gap-2 mb-4">
-               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">Quality:</span>
+               <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-2">Quality:</span>
                {[1, 2, 3, 4, 5].map(star => (
                  <Star 
                    key={star} 
-                   className={`w-5 h-5 cursor-pointer transition-transform hover:scale-110 ${star <= rating ? 'text-amber-400 fill-amber-400' : 'text-slate-200 hover:text-amber-200'}`}
+                   className={`w-5 h-5 cursor-pointer transition-transform hover:scale-110 ${star <= rating ? 'text-amber-400 fill-amber-400' : 'text-slate-200 dark:text-slate-700 hover:text-amber-200 dark:hover:text-amber-900'}`}
                    onClick={() => setRating(star)}
                  />
                ))}
@@ -114,35 +114,35 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
                  </div>
                )}
                {client.website && (
-                 <div className="flex justify-between items-center text-slate-600">
+                 <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                     <div className="flex items-center gap-2 font-medium">
-                       <Globe className="w-4 h-4 text-slate-400" /> Web Link
+                       <Globe className="w-4 h-4 text-slate-400 dark:text-slate-500" /> Web Link
                     </div>
-                    <a href={client.website.startsWith('http') ? client.website : `https://${client.website}`} target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-600 hover:underline">
+                    <a href={client.website.startsWith('http') ? client.website : `https://${client.website}`} target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
                        Visit Link
                     </a>
                  </div>
                )}
-               <div className="flex justify-between items-center text-slate-600 pt-2 border-t border-slate-50 border-dashed">
+               <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-50 dark:border-slate-800 border-dashed">
                   <div className="flex items-center gap-2 font-medium">
-                     <MapPin className="w-4 h-4 text-slate-400" /> Source
+                     <MapPin className="w-4 h-4 text-slate-400 dark:text-slate-500" /> Source
                   </div>
-                  <span className="font-bold text-slate-900">{client.source || 'Manual Entry'}</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{client.source || 'Manual Entry'}</span>
                </div>
-               <div className="flex justify-between items-center text-slate-600">
+               <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                   <div className="flex items-center gap-2 font-medium">
-                     <Clock className="w-4 h-4 text-slate-400" /> Next Follow-up
+                     <Clock className="w-4 h-4 text-slate-400 dark:text-slate-500" /> Next Follow-up
                   </div>
-                  <span className="font-bold text-slate-900">
+                  <span className="font-bold text-slate-900 dark:text-white">
                      {client.followUpDate ? new Date(client.followUpDate).toLocaleDateString() : 'Unscheduled'}
                   </span>
                </div>
                {client.meetingDate && (
-                 <div className="flex justify-between items-center text-slate-600 pt-2 border-t border-slate-50 border-dashed">
+                 <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-50 dark:border-slate-800 border-dashed">
                     <div className="flex items-center gap-2 font-medium">
                        <Clock className="w-4 h-4 text-purple-400" /> Next Meeting
                     </div>
-                    <span className="font-bold text-slate-900 bg-purple-100 px-2 py-0.5 rounded text-xs uppercase tracking-wider">
+                    <span className="font-bold text-slate-900 dark:text-white bg-purple-100 dark:bg-purple-900/50 px-2 py-0.5 rounded text-xs uppercase tracking-wider">
                        {new Date(client.meetingDate).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                     </span>
                  </div>
@@ -153,7 +153,7 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
           {/* Discovery Notes */}
           <div className="card-container p-6">
              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <FileText className="w-5 h-5 text-emerald-600" /> Client Notes
                 </h3>
              </div>
@@ -173,10 +173,10 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
                </div>
              ) : (
                <div 
-                 className="p-4 bg-slate-50 border border-slate-100 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors group relative"
+                 className="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group relative"
                  onClick={() => setIsEditingNeeds(true)}
                >
-                 <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap min-h-[60px]">
+                 <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed whitespace-pre-wrap min-h-[60px]">
                    {needs || "Click to add requirements, budget, or other permanent notes about this client."}
                  </p>
                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white p-1 rounded-md shadow-sm border border-slate-100">
@@ -190,14 +190,14 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
         {/* Right Column: Interaction Tracking */}
         <div className="lg:col-span-2 space-y-6">
            {/* Add New Log Form (Prominent) */}
-           <div className="card-container p-6 border-emerald-200 bg-emerald-50/30">
-              <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+           <div className="card-container p-6 border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/30 dark:bg-emerald-900/10">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                  <History className="w-5 h-5 text-emerald-600" /> Log Interaction
               </h3>
               <form onSubmit={handleAddLog} className="space-y-4">
                  <div>
                    <textarea 
-                     className="input-field border-emerald-200 bg-white min-h-[100px] resize-none text-base font-medium placeholder:text-slate-400"
+                     className="input-field border-emerald-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 min-h-[100px] resize-none text-base font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500"
                      value={newLog.note}
                      onChange={(e) => setNewLog({ ...newLog, note: e.target.value })}
                      placeholder="What did you talk about? e.g., 'Called them, they were busy. Call back tomorrow at 2 PM.'"
@@ -206,7 +206,7 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
                  
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                       <label className="text-xs font-bold text-slate-600 uppercase tracking-widest block mb-2">Update Status</label>
+                       <label className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest block mb-2">Update Status</label>
                        <select 
                          className="input-field py-2.5 font-semibold text-sm"
                          value={newLog.status}
@@ -254,16 +254,16 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
 
            {/* History List */}
            <div className="card-container p-6">
-              <h3 className="text-lg font-bold text-slate-900 mb-6">Past Interactions ({client.logs.length})</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Past Interactions ({client.logs.length})</h3>
               
               <div className="space-y-6">
                  {client.logs.length > 0 ? (
                    client.logs.map((log) => (
-                     <div key={log.id} className="relative pl-6 border-l-2 border-slate-200">
-                        <div className="absolute top-1.5 -left-[9px] w-4 h-4 bg-white rounded-full border-4 border-emerald-500 shadow-sm"></div>
-                        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+                     <div key={log.id} className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+                        <div className="absolute top-1.5 -left-[9px] w-4 h-4 bg-white dark:bg-slate-900 rounded-full border-4 border-emerald-500 shadow-sm"></div>
+                        <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4">
                            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                              <span className="text-xs font-bold text-slate-500 tracking-wider bg-white px-2 py-1 rounded border border-slate-200">
+                              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wider bg-white dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200 dark:border-slate-700">
                                 {new Date(log.date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                               </span>
                               <span className={`badge text-[10px] py-0.5 ${
@@ -274,7 +274,7 @@ const ClientProfile = ({ client, onBack, onAddLog, onUpdateClient }) => {
                                 {log.status}
                               </span>
                            </div>
-                           <p className="text-slate-700 text-base font-medium whitespace-pre-wrap">
+                           <p className="text-slate-700 dark:text-slate-300 text-base font-medium whitespace-pre-wrap">
                               {log.note}
                            </p>
                         </div>

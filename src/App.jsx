@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { 
-  Users, PhoneCall, Calendar, Search, Plus, Download, BarChart3, Clock, MessageSquare, Menu, X, Upload, CheckCircle2, XCircle, LogOut
+  Users, PhoneCall, Calendar, Search, Plus, Download, BarChart3, Clock, MessageSquare, Menu, X, Upload, CheckCircle2, XCircle, LogOut, Moon, Sun
 } from 'lucide-react';
 
 import Dashboard from './components/Dashboard';
@@ -33,7 +33,16 @@ function App() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDarkMode, setIsDarkMode] = useLocalStorage('crm_theme_dark', false);
   const fileInputRef = useRef(null);
+
+  React.useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   const handleAddClient = (newClient) => {
     const client = {
@@ -194,19 +203,24 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden font-sans dark-transition">
       
       {/* Mobile Header / Search */}
-      <div className="md:hidden fixed top-0 w-full bg-slate-900 text-white z-40 px-4 py-3 flex items-center justify-between shadow-lg">
+      <div className="md:hidden fixed top-0 w-full bg-slate-900 dark:bg-slate-950 border-b border-slate-800 text-white z-40 px-4 py-3 flex items-center justify-between shadow-lg">
          <span className="font-bold tracking-tight text-lg">NEXUS.</span>
-         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 bg-slate-800 rounded-lg">
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-         </button>
+         <div className="flex items-center gap-2">
+           <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 bg-slate-800 rounded-lg text-slate-300">
+             {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+           </button>
+           <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 bg-slate-800 rounded-lg">
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+           </button>
+         </div>
       </div>
 
       {/* Sidebar Navigation */}
       <div className={`
-        fixed inset-y-0 left-0 z-30 w-72 bg-slate-900 text-slate-300 transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-30 w-72 bg-slate-900 dark:bg-slate-950 border-r border-slate-800 text-slate-300 transform transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 flex flex-col will-change-transform shadow-2xl md:shadow-none
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
@@ -328,8 +342,15 @@ function App() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold text-white truncate">{user.fullName}</div>
-              <div className="text-xs text-slate-500 truncate">{user.email}</div>
+              <div className="text-xs text-slate-400 truncate">{user.email}</div>
             </div>
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 rounded-lg text-slate-500 hover:text-emerald-400 hover:bg-slate-800 transition-colors hidden md:block"
+              title="Toggle Theme"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <button
               onClick={logout}
               className="p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition-colors"
@@ -370,9 +391,9 @@ function App() {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 md:pt-0 pt-16 h-full overflow-hidden bg-white/50 relative">
+      <main className="flex-1 flex flex-col min-w-0 md:pt-0 pt-16 h-full overflow-hidden bg-slate-50/50 dark:bg-slate-950/50 relative">
         {/* Dynamic Background subtle grid */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNFMkU4RjAiLz48L3N2Zz4=')] opacity-50 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNFMkU4RjAiLz48L3N2Zz4=')] dark:opacity-10 opacity-50 pointer-events-none"></div>
         
         <div className="flex-1 overflow-y-auto w-full custom-scrollbar relative z-10 px-4 py-8 md:px-8 lg:px-12">
           <div className="max-w-7xl mx-auto h-full">
@@ -429,7 +450,7 @@ function App() {
       {/* Add Client Floating Action Button on Mobile */}
       <button 
         onClick={() => setShowAddModal(true)}
-        className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-emerald-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-emerald-700 transition-colors z-40 focus:outline-none focus:ring-4 focus:ring-emerald-500/30"
+        className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full shadow-lg shadow-emerald-500/30 flex items-center justify-center hover:scale-105 transition-transform z-40 focus:outline-none focus:ring-4 focus:ring-emerald-500/30"
       >
         <Plus className="w-6 h-6" />
       </button>
